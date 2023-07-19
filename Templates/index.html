@@ -1,0 +1,134 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Release Note</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            padding: 20px;
+            margin: 0;
+        }
+
+        h1 {
+            color: #333333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        form {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 5px;
+            border: 1px solid #cccccc;
+            resize: vertical;
+            font-size: 16px;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        input[type="submit"] {
+            padding: 12px 20px;
+            background-color: #337ab7;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+            input[type="submit"]:hover {
+                background-color: #286090;
+            }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+            .form-group label {
+                font-weight: normal;
+                font-size: 18px;
+            }
+
+            .form-group input[type="checkbox"] {
+                margin-top: 7px;
+            }
+
+            .form-group:last-child {
+                margin-bottom: 0;
+            }
+    </style>
+</head>
+<body>
+    <h1>Release Note</h1>
+    <form action="/submit" method="post">
+        <div class="form-group">
+            <label for="release_version">Release Version:</label>
+            <input type="text" name="release_version" id="release_version" required>
+        </div>
+		
+		<div class="form-group">
+            <label for="reference_ticket">Reference Ticket:</label>
+            <input type="text" name="reference_ticket" id="reference_ticket" required>
+        </div>
+
+        <div class="form-group">
+            <label for="release_description">Release Description:</label>
+            <input type="text" name="release_description" id="release_description" required>
+        </div>
+
+        <div class="form-group">
+            <label for="type_of_change">Type of Change:</label>
+            <select name="type_of_change" id="type_of_change" required>
+                <option value="new feature">New Feature</option>
+                <option value="improvement">Improvement</option>
+                <option value="bug fixes">Bug Fixes</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="project_name">Project Name:</label>
+            <input type="text" name="project_name" id="project_name" required>
+        </div>
+
+        <div class="form-group">
+            <label>Change Areas:</label>
+            <div>
+                <input type="checkbox" name="change_areas" value="project_changes"> Project Changes
+            </div>
+            <div>
+                <input type="checkbox" name="change_areas" value="database_changes"> Database Changes
+            </div>
+            <div>
+                <input type="checkbox" name="change_areas" value="configuration_changes"> Configuration Changes
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="deployment_steps">Deployment Steps:</label>
+            <textarea name="deployment_steps" id="deployment_steps" rows="8" required></textarea>
+        </div>
+
+        <div class="form-group">
+            <input type="submit" value="Submit">
+        </div>
+    </form>
+</body>
+</html>
