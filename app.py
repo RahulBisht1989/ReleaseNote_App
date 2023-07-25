@@ -1,8 +1,9 @@
 from flask import Flask, render_template, request, send_file
 from io import BytesIO
 from docx import Document
-from docx.shared import Pt
+from docx.shared import Pt,Inches
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
+import re
 
 app = Flask(__name__,template_folder='template')
 
@@ -11,6 +12,7 @@ def index():
     return render_template('index.html')
 
 @app.route('/submit', methods=['POST'])
+    
 def submit():
     release_version = request.form['release_version']
     reference_ticket = request.form['reference_ticket']
@@ -19,7 +21,10 @@ def submit():
     project_name = request.form['project_name']
     change_areas = request.form.getlist('change_areas')
     deployment_steps = request.form['deployment_steps']
-
+    
+    # Get the desired filename from the form
+    desired_filename = request.form['filename']
+    
     # Create a BytesIO object to store the document in memory
     output = BytesIO()
 
@@ -72,7 +77,6 @@ def submit():
         checkbox.bold = True
         checkbox_paragraph.add_run(f" {area.replace('_', ' ').title()}")
 
-
     # Gap before Deployment Steps
     document.add_paragraph()
 
@@ -81,22 +85,27 @@ def submit():
     deployment_steps_paragraph.add_run('Deployment Steps:').bold = True
     deployment_steps_paragraph.paragraph_format.space_after = Pt(6)
 
-	# Add the deployment steps text
-    steps = deployment_steps.split('\n')
-    for i, step in enumerate(steps, start=1):
+    # Add a new paragraph to start the deployment steps on the next line
+    deployment_steps_paragraph.add_run().add_break()
+    
+    # Add the deployment steps preserving formatting and indentation
+    steps = re.split(r'\r?\n', deployment_steps)
+    for step in steps:
         if step.strip():
-            p = document.add_paragraph()
-            p.add_run('\t{}. '.format(i)).bold = True
-            p.add_run(step.strip())
-
+            # Add each step as a separate run within the same paragraph
+            run_step = deployment_steps_paragraph.add_run(step + '\n').font.size = Pt(11)
+    
     # Save the Word document to the BytesIO object
     document.save(output)
 
     # Seek to the beginning of the BytesIO stream
     output.seek(0)
-
+    
+    # Construct the filename using the desired filename input from the form
+    filename = desired_filename.strip() + ".docx" if desired_filename.strip() else "ReleaseNote.docx"
+    
     return send_file(output, as_attachment=True,
-                     download_name="ReleaseNote.docx",
+                     download_name=filename,
                      mimetype="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                      etag=False,
                      conditional=False)

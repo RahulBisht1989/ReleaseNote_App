@@ -126,8 +126,14 @@
             <textarea name="deployment_steps" id="deployment_steps" rows="8" required></textarea>
         </div>
 
+        <!-- Add the input field for the desired filename with default value -->
         <div class="form-group">
-            <input type="submit" value="Submit">
+            <label for="filename">Desired Filename:</label>
+            <input type="text" name="filename" placeholder="ReleaseNote" value="ReleaseNote" required><br>
+        </div>
+
+        <div class="form-group">
+            <input type="submit" value="Generate Release Note">
         </div>
     </form>
 </body>
