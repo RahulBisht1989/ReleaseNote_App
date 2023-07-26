@@ -84,17 +84,19 @@ def submit():
     deployment_steps_paragraph = document.add_paragraph()
     deployment_steps_paragraph.add_run('Deployment Steps:').bold = True
     deployment_steps_paragraph.paragraph_format.space_after = Pt(6)
-
-    # Add a new paragraph to start the deployment steps on the next line
-    deployment_steps_paragraph.add_run().add_break()
     
-    # Add the deployment steps preserving formatting and indentation
-    steps = re.split(r'\r?\n', deployment_steps)
+   # Add the deployment steps preserving formatting and indentation
+    steps = deployment_steps.splitlines()
     for step in steps:
         if step.strip():
-            # Add each step as a separate run within the same paragraph
-            run_step = deployment_steps_paragraph.add_run(step + '\n').font.size = Pt(11)
-    
+            # Add each step as a separate paragraph
+            step_paragraph = document.add_paragraph(step)
+            for run in step_paragraph.runs:
+                run.font.size = Pt(11)
+        else:
+            # Add a blank line if there's an empty line in the input
+            document.add_paragraph()
+            
     # Save the Word document to the BytesIO object
     document.save(output)
 
